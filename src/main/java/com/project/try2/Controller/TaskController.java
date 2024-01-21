@@ -17,11 +17,8 @@ public class TaskController {
     public TaskController(TaskRepository taskRepository) {
             this.taskRepository = taskRepository;
     }
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Task addTask(@RequestBody Task task){
-       return this.taskRepository.save(task);
-    }
+    @GetMapping()
+    public Iterable<Task> getAllTasks(){ return this.taskRepository.findAll(); }
 
     @GetMapping("/{id}")
     public Task getTask(@PathVariable Integer id){
@@ -31,6 +28,39 @@ public class TaskController {
        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-    @GetMapping()
-    public Iterable<Task> getAllTasks(){ return this.taskRepository.findAll(); }
-}
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Task addTask(@RequestBody Task task){
+        return this.taskRepository.save(task);
+    }
+
+    @PutMapping("/{id}")
+    public Task updateTask(@PathVariable("id") Integer id, @RequestBody Task t){
+        Optional<Task> taskToUpdateOptional = this.taskRepository.findById(id);
+        if (!taskToUpdateOptional.isPresent()) {
+            return null;
+        }
+        Task taskToUpdate = taskToUpdateOptional.get();
+
+        if (t.getTitle() != null){taskToUpdate.setTitle(t.getTitle());
+        }
+        if (t.getText() != null){taskToUpdate.setText(t.getText());
+        }
+        if (t.getDate() != null){taskToUpdate.setDate(t.getDate());
+        }
+        if (t.getTime() != null){taskToUpdate.setTime(t.getTime());
+        }
+        if (t.getLevel() != null){taskToUpdate.setLevel(t.getLevel());
+        }
+        Task updatedTask = this.taskRepository.save(taskToUpdate);
+        return updatedTask;
+        }
+        @DeleteMapping("/{id}")
+    public Task deleteTask(@PathVariable("id") Integer id){
+        Optional<Task> taskToDeleteOptional = this.taskRepository.findById(id);
+        if (!taskToDeleteOptional.isPresent()){return null;}
+        Task taskToDelete = taskToDeleteOptional.get();
+        this.taskRepository.delete(taskToDelete);
+        return taskToDelete;
+        }
+    }
