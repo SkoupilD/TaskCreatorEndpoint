@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/tasks")
@@ -27,6 +31,17 @@ public class TaskController {
             return task.get();
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/search")
+    public List<Task> searchTasks(
+            @RequestParam(name = "date", required = false) LocalDate date,
+            @RequestParam(name = "level", required = false) Integer level){
+            if (date!=null && level!=null){return this.taskRepository.findByDateAndLevel(date, level);
+            } else if (date!=null){ return this.taskRepository.findByDate(date);
+            } else if (level!=null){return this.taskRepository.findByLevel(level);
+            } else { return new ArrayList<>();
+            }
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -63,4 +78,5 @@ public class TaskController {
         this.taskRepository.delete(taskToDelete);
         return taskToDelete;
     }
+
 }
