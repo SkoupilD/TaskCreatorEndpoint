@@ -15,17 +15,17 @@ public class TaskController {
     private final TaskRepository taskRepository;
 
     public TaskController(TaskRepository taskRepository) {
-            this.taskRepository = taskRepository;
+        this.taskRepository = taskRepository;
     }
     @GetMapping()
     public Iterable<Task> getAllTasks(){ return this.taskRepository.findAll(); }
 
     @GetMapping("/{id}")
     public Task getTask(@PathVariable Integer id){
-       Optional <Task> task =  this.taskRepository.findById(id);
-       if (task.isPresent()) {
-           return task.get();
-       }
+        Optional <Task> task =  this.taskRepository.findById(id);
+        if (task.isPresent()) {
+            return task.get();
+        }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
     @PostMapping
@@ -54,13 +54,13 @@ public class TaskController {
         }
         Task updatedTask = this.taskRepository.save(taskToUpdate);
         return updatedTask;
-        }
-        @DeleteMapping("/{id}")
+    }
+    @DeleteMapping("/{id}")
     public Task deleteTask(@PathVariable("id") Integer id){
         Optional<Task> taskToDeleteOptional = this.taskRepository.findById(id);
         if (!taskToDeleteOptional.isPresent()){return null;}
         Task taskToDelete = taskToDeleteOptional.get();
         this.taskRepository.delete(taskToDelete);
         return taskToDelete;
-        }
     }
+}
