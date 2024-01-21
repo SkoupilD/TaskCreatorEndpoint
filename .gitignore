@@ -1,0 +1,40 @@
+# Spring Boot
+/target/
+
+# IntelliJ IDEA
+.idea/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Gradle
+.gradle/
+build/
+
+# Logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Compiled bytecode
+*.class
+
+# Package Files
+*.jar
+*.war
+*.ear
+
+# Local configuration files
+application.yml
+application.properties
+
+# Test Reports
+TEST-*.xml
+
+# IDE-specific files
+.vscode/
+*.iml
